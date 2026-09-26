@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FFSM | A.F. Lagoas</title>
+<link rel="icon" type="image/png" href="../ffsm.png">
+<style>
+  :root{
+    --azul-escuro:#910b26;
+    --azul-faixa:#b2082a;
+    --azul-link:#c81438;
+    --cinza-rodape:#4a4a4a;
+    --cinza-claro:#f4f4f4;
+    --borda:#e2e2e2;
+    --texto:#222;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:Arial, Helvetica, sans-serif;color:var(--texto);background:#fff;}
+  a{text-decoration:none;color:inherit;}
+  h2{font-weight:400;}
+
+  /* ===== CABEÇALHO ===== */
+  #header{border-bottom:1px solid var(--borda);}
+  #header-top{
+    max-width:1200px;margin:0 auto;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 20px;
+  }
+  #logo{display:flex;align-items:center;gap:10px;font-weight:bold;font-size:26px;color:var(--azul-escuro);}
+  #logo img{height:72px;}
+  #botao-tema{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--borda);background:var(--cinza-claro);color:var(--texto);width:38px;height:38px;padding:7px;border-radius:4px;cursor:pointer;}
+  #botao-tema img{width:20px;height:20px;object-fit:contain;}
+  #faixa-azul{background:var(--azul-faixa);height:14px;}
+
+  /* ===== BREADCRUMB ===== */
+  #breadcrumb{max-width:1200px;margin:0 auto;padding:14px 20px;font-size:12px;color:#666;}
+  #breadcrumb a{color:var(--azul-link);}
+
+  /* ===== CONTEÚDO ===== */
+  #conteudo{max-width:1200px;margin:0 auto;padding:0 20px 60px;display:flex;gap:40px;}
+
+  #coluna-esquerda{width:230px;flex-shrink:0;}
+  h2.titulo-pagina{font-size:26px;color:var(--azul-escuro);margin:0 0 16px;}
+  #busca-clubes{position:relative;margin-bottom:16px;}
+  #busca-clubes input{width:100%;padding:9px 34px 9px 12px;border:1px solid var(--borda);border-radius:4px;font-size:13px;}
+  #busca-clubes span{position:absolute;right:10px;top:9px;opacity:.5;}
+  #menu-divisoes{list-style:none;margin:0 0 24px;padding:0;border-left:2px solid var(--borda);}
+  #menu-divisoes li a{display:block;padding:11px 14px;font-size:14px;color:var(--texto);border-left:3px solid transparent;}
+  #menu-divisoes li a:hover{background:var(--cinza-claro);}
+  #menu-divisoes li a.ativa{background:var(--azul-escuro);color:#fff;border-left:3px solid var(--azul-faixa);font-weight:bold;}
+
+  #lista-mini-escudos{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+  #lista-mini-escudos a{display:block;}
+  #lista-mini-escudos img{width:100%;height:56px;object-fit:contain;opacity:.55;transition:opacity .15s;}
+  #lista-mini-escudos a.ativo img{opacity:1;}
+  #lista-mini-escudos a:hover img{opacity:1;}
+
+  #lista-mini-escudos-ativo {display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+  #lista-mini-escudos-ativo a{display:block;}
+  #lista-mini-escudos-ativo img{width:100%;height:auto;transition:opacity .15s;}
+  #lista-mini-escudos-ativo a:hover img{opacity:1;}
+
+  /* ===== COLUNA DIREITA ===== */
+  #coluna-direita{flex:1;border-left:1px solid var(--borda);padding-left:40px;min-width:0;}
+
+  /* Próximo jogo */
+  .calendario-jogos{background:#fff;border:1px solid var(--borda);border-radius:0;padding:18px 20px;margin-bottom:28px;}
+  .calendario-jogos p{margin:0 0 14px;font-size:18px;font-weight:400;color:#777;text-transform:none;letter-spacing:0;}
+  .caixa-jogo{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:20px;color:#333;text-align:center;}
+  .caixa-jogo .info-jogo{display:flex;align-items:center;justify-content:center;gap:18px;margin:12px 0 0;width:100%;}
+  .caixa-jogo .info-jogo img{width:56px;height:56px;object-fit:contain;flex:0 0 56px;}
+  .caixa-jogo .placar{font-weight:400;font-size:30px;color:#f36c21;}
+  .caixa-jogo .info-jogo > span:not(.placar){font-size:20px;color:#333;}
+
+  @media (max-width:760px){
+    .calendario-jogos{padding:16px 12px;}
+    .calendario-jogos p{font-size:18px;}
+    .caixa-jogo{font-size:16px;}
+    .caixa-jogo .info-jogo{gap:12px;}
+    .caixa-jogo .info-jogo img{width:50px;height:50px;flex-basis:50px;}
+    .caixa-jogo .placar{font-size:28px;}
+  }
+
+  /* Descrição do clube */
+  .descricao-time{display:flex;gap:24px;margin-bottom:38px;align-items:flex-start;}
+  .escudo-grande{width:112px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;}
+  .escudo-grande img{width:112px;height:106px;object-fit:contain;}
+  .escudo-grande::after,.mascote::after{display:block;width:100%;padding:5px 4px;background:var(--cinza-claro);text-align:center;font-size:11px;color:#666;}
+  .escudo-grande::after{content:"Emblema";}
+  #informacoes{min-width:0;flex:1;}
+  #informacoes div{display:grid;grid-template-columns:92px minmax(0,1fr);gap:8px;padding:3px 0;font-size:14px;line-height:1.25;}
+  .span-rotulo{font-weight:bold;color:var(--azul-escuro);margin-right:6px;}
+  .nome-clube{font-size:24px;font-weight:bold;margin:0 0 8px;}
+
+  h2.secao{font-size:18px;color:var(--azul-escuro);border-bottom:2px solid var(--borda);padding-bottom:8px;margin:0 0 16px;}
+
+  /* Informações gerais / estádio */
+  .secao-detalhe{border:0;padding:0;margin:0 0 18px;}
+  .info-geral{display:flex;gap:24px;margin-bottom:38px;align-items:flex-start;}
+  .mascote{width:112px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;}
+  .mascote img{width:112px;height:106px;object-fit:contain;}
+  .mascote::after{content:"Mascote";}
+  .info-geral #informacoes h2{margin-top:0 !important;}
+
+  /* Títulos conquistados */
+  .titulos-conquistados{margin-bottom:38px;}
+  .lista-titulos{list-style:none;margin:0;padding:0;border-top:1px solid var(--borda);}
+  .lista-titulos li{display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-bottom:1px solid var(--borda);font-size:14px;}
+  .lista-titulos .ano-titulo{font-weight:bold;color:var(--azul-escuro);white-space:nowrap;}
+
+  /* Uniformes */
+  .uniformes{margin-bottom:38px;}
+  .lista-uniformes{display:flex;flex-direction:column;gap:14px;}
+  .uniforme-caixa{display:flex;gap:24px;align-items:flex-start;background:transparent;border-bottom:1px solid var(--borda);padding:0 0 12px;min-width:220px;}
+  .uniforme-image{width:112px;flex-shrink:0;display:flex;flex-direction:column;align-items:stretch;}
+  .uniforme-image img{width:112px;height:76px;object-fit:contain;}
+  .uniforme-modelo{padding:5px 4px;background:var(--cinza-claro);text-align:center;font-size:11px;color:#666;}
+  .uniforme-caixa .informacoes{padding-top:3px;}
+  .uniforme-caixa .informacoes div{display:grid;grid-template-columns:80px minmax(0,1fr);gap:8px;font-size:13px;padding:2px 0;line-height:1.25;}
+  .uniforme-rotulo{display:block;}
+
+  /* Atletas */
+  .atletas{margin-bottom:10px;}
+  .menu-horizontal{margin:10px 0 18px;}
+  .menu-horizontal ul{list-style:none;display:flex;gap:6px;margin:0;padding:0;}
+  .menu-horizontal a{display:block;padding:8px 16px;font-size:13px;border-radius:4px 4px 0 0;background:var(--cinza-claro);color:#555;}
+  .menu-horizontal li.ativa a{background:var(--azul-escuro);color:#fff;font-weight:bold;}
+  #busca-atletas{display:flex;gap:8px;margin-bottom:16px;}
+  #busca-atletas input{flex:1;padding:8px 12px;border:1px solid var(--borda);border-radius:4px;font-size:13px;}
+  #busca-atletas button{border:none;background:var(--azul-escuro);color:#fff;padding:0 16px;border-radius:4px;cursor:pointer;font-size:13px;}
+  .lista-atletas{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;}
+  .atleta-caixa{padding:10px 14px;border-bottom:1px solid var(--borda);font-size:13px;}
+  .atleta-caixa .apelido{font-weight:bold;color:var(--azul-escuro);}
+  .paginacao{display:flex;gap:6px;justify-content:center;margin-top:18px;font-size:13px;}
+  .paginacao button{padding:6px 11px;border:1px solid var(--borda);border-radius:4px;background:#fff;color:var(--texto);cursor:pointer;font-size:13px;}
+  .paginacao button.atual{background:var(--azul-escuro);color:#fff;border-color:var(--azul-escuro);}
+
+  /* ===== RODAPÉ ===== */
+  #rodape{background:var(--cinza-rodape);color:#ddd;margin-top:40px;}
+  #rodape-links{max-width:1200px;margin:0 auto;padding:16px 20px;font-size:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  #rodape-links a{color:#ddd;}
+  #rodape-links a:hover{color:#fff;}
+  #rodape-links .direitos{margin-left:auto;font-weight:bold;letter-spacing:.5px;font-size:11px;}
+  #rodape-baixo{background:#3a3a3a;font-size:11px;color:#aaa;}
+  #rodape-baixo div{max-width:1200px;margin:0 auto;padding:10px 20px;}
+
+  /* ===== RESPONSIVO ===== */
+  @media (max-width:760px){
+    #conteudo{flex-direction:column;}
+    #coluna-direita{border-left:none;padding-left:0;border-top:1px solid var(--borda);padding-top:20px;}
+    .descricao-time,.info-geral{flex-direction:column;}
+    .lista-atletas{grid-template-columns:1fr;}
+    #lista-mini-escudos{grid-template-columns:repeat(6,1fr);}
+  }
+
+  @media (max-width:760px){
+    #header-top{flex-direction:row;gap:12px;padding:14px 16px;}
+    #logo{min-width:0;}
+    #botao-tema{flex:0 0 38px;}
+    #logo img{height:58px;}
+    #breadcrumb{padding:12px 14px;font-size:11px;}
+    #conteudo{padding:0 14px 40px;gap:24px;}
+    #coluna-esquerda{width:auto;}
+    h2.titulo-pagina{font-size:24px;margin-bottom:14px;}
+    #menu-divisoes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;border-left:0;}
+    #menu-divisoes li a{padding:10px 9px;border-left:0;border-radius:3px;font-size:13px;}
+    #menu-divisoes li:last-child{grid-column:1 / -1;}
+    #lista-mini-escudos{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;}
+    #lista-mini-escudos img{height:52px;}
+    #coluna-direita{padding:18px 0 0;}
+    .calendario-jogos{padding:14px 10px;margin-bottom:24px;}
+    .calendario-jogos p{font-size:16px;}
+    .caixa-jogo{font-size:15px;}
+    .caixa-jogo .info-jogo{gap:8px;}
+    .caixa-jogo .info-jogo img{width:44px;height:44px;flex-basis:44px;}
+    .caixa-jogo .placar{font-size:22px;}
+    .caixa-jogo .info-jogo > span:not(.placar){font-size:16px;}
+    .descricao-time,.info-geral{gap:14px;margin-bottom:28px;}
+    .escudo-grande,.mascote{width:96px;}
+    .escudo-grande img,.mascote img{width:96px;height:92px;}
+    #informacoes div{grid-template-columns:84px minmax(0,1fr);font-size:13px;}
+    .nome-clube{font-size:21px;}
+    .uniforme-caixa{gap:14px;}
+    #busca-atletas{gap:6px;}
+    #busca-atletas button{padding:0 13px;}
+    #rodape-links{padding:14px 16px;}
+    #rodape-links .direitos{width:100%;margin-left:0;margin-top:4px;}
+  }
+
+  body.tema-escuro{--cinza-claro:#2b2b2b;--borda:#454545;--texto:#f1f1f1;background:#181818;}
+  body.tema-escuro #header{background:#202020;}
+  body.tema-escuro #breadcrumb{color:#aaa;}
+  body.tema-escuro #busca-clubes input,body.tema-escuro #busca-atletas input{background:#242424;color:var(--texto);}
+  body.tema-escuro #coluna-direita{background:#181818;}
+  body.tema-escuro .calendario-jogos{background:#202020;}
+  body.tema-escuro .paginacao button{background:#242424;color:var(--texto);}
+  body.tema-escuro #botao-tema{background:#383838;color:#fff;}
+  body.tema-escuro .calendario-jogos p,
+  body.tema-escuro .caixa-jogo,
+  body.tema-escuro .caixa-jogo .info-jogo > span:not(.placar){color:#f1f1f1;}
+  .atleta-caixa{cursor:pointer;}
+  .atleta-caixa:focus-visible{outline:2px solid var(--azul-link);outline-offset:-2px;}
+  #modal-atleta{position:fixed;inset:0;z-index:10;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.65);}
+  #modal-atleta.aberto{display:flex;}
+  .janela-atleta{position:relative;width:min(420px,100%);background:#fff;color:#222;border:1px solid var(--borda);padding:24px;border-radius:6px;box-shadow:0 12px 35px rgba(0,0,0,.35);}
+  body.tema-escuro .janela-atleta{background:#242424;color:#f1f1f1;}
+  .fechar-modal{position:absolute;top:8px;right:10px;border:0;background:transparent;color:inherit;font-size:24px;line-height:1;cursor:pointer;}
+  .foto-atleta{display:block;width:92px;height:92px;margin:0 auto 16px;object-fit:contain;}
+  .janela-atleta h3{text-align:center;margin:0 0 18px;color:var(--azul-escuro);}
+  body.tema-escuro .janela-atleta h3{color:#ff738c;}
+  .dados-atleta{display:grid;grid-template-columns:150px 1fr;gap:8px;margin:0;font-size:14px;}
+  .dados-atleta dt{font-weight:bold;color:var(--azul-escuro);}
+  body.tema-escuro .dados-atleta dt{color:#ff9bad;}
+  .dados-atleta dd{margin:0;}
+</style>
+</head>
+<body>
+
+<!-- ===================== CABEÇALHO ===================== -->
+<div id="header">
+  <div id="header-top">
+    <a href="../index.html" id="logo">
+      <img src="../logo-ffsm.png" alt="Logo da FFSM">
+    </a>
+    <button id="botao-tema" type="button" aria-label="Ativar modo escuro"><img src="../assets/sun.png" alt=""></button>
+  </div>
+</div>
+<div id="faixa-azul"></div>
+
+<!-- ===================== BREADCRUMB ===================== -->
+<div id="breadcrumb">
+  Você está aqui: <a href="../index.html">Clubes e ligas</a> &gt; A.F. Lagoas
+</div>
+
+<!-- ===================== CONTEÚDO ===================== -->
+<div id="conteudo">
+
+  <!-- ===== COLUNA ESQUERDA ===== -->
+  <div id="coluna-esquerda">
+    <h2 class="titulo-pagina">Clubes e ligas</h2>
+    <div id="busca-clubes">
+      <input id="txBusca" type="text" placeholder="localizar clubes">
+      <span>🔍</span>
+    </div>
+    <ul id="menu-divisoes">
+      <li><a href="../index.html?divisao=serie-a">Série A</a></li>
+      <li><a href="../index.html?divisao=serie-b" class="ativa">Série B</a></li>
+      <li><a href="../index.html?divisao=serie-c">Série C</a></li>
+      <li><a href="../index.html?divisao=liga-municipal">Liga Municipal</a></li>
+      <li><a href="../index.html?divisao=amadores">Amadores (sem divisão)</a></li>
+    </ul>
+
+    <!-- Mini escudos dos demais clubes da divisão -->
+    <div id="lista-mini-escudos">
+      <a href="af-lagoas.html" class="ativo" title="A.F. Lagoas"><img src="../escudos/af-lagoas.png" alt="A.F. Lagoas"></a>
+      <a href="ca-porto-branco.html" title="C.A. Porto Branco"><img src="../escudos/ca-porto-branco.png" alt="C.A. Porto Branco"></a>
+      <a href="cs-porto-venezia.html" title="C.S. Porto Venezia"><img src="../escudos/cs-porto-venezia.png" alt="C.S. Porto Venezia"></a>
+      <a href="sao-marapo-fc.html" title="São Marapo F.C."><img src="../escudos/sao-marapo-fc.png" alt="São Marapo F.C."></a>
+      <a href="santa-lucia-fc.html" title="Santa Lúcia F.C."><img src="../escudos/santa-lucia-fc.png" alt="Santa Lúcia F.C."></a>
+      <a href="sao-jaco-fc.html" title="São Jaco F.C."><img src="../escudos/sao-jaco-fc.png" alt="São Jaco F.C."></a>
+      <a href="martin-ec.html" title="Martin E.C."><img src="../escudos/martin-ec.png" alt="Martin E.C."></a>
+      <a href="sc-wagner.html" title="S.C. Wagner"><img src="../escudos/sc-wagner.png" alt="S.C. Wagner"></a>
+    </div>
+  </div>
+
+  <!-- ===== COLUNA DIREITA ===== -->
+  <div id="coluna-direita">
+
+    <!-- Próximo jogo -->
+    <div class="calendario-jogos">
+      <p>Calendário de jogos</p>
+      <div class="caixa-jogo">
+        <span>Domingo&nbsp;|&nbsp;17 JAN 27 19H30</span>
+        <span>Campeonato San-Mârtinense - Série B</span>
+        <span>Estádio do Litoral</span>
+        <div class="info-jogo">
+          <img src="../escudos/af-lagoas.png" alt="A.F. Lagoas">
+          <span class="placar">A definir</span>
+          <span>X</span>
+          <span class="placar">A definir</span>
+          <img src="../escudos/ca-porto-branco.png" alt="C.A. Porto Branco">
+        </div>
+      </div>
+    </div>
+
+    <!-- Descrição do clube -->
+    <div class="descricao-time">
+      <div class="escudo-grande">
+        <img src="../escudos/af-lagoas.png" alt="Escudo do A.F. Lagoas">
+      </div>
+      <div id="informacoes">
+        <p class="nome-clube">Associação de Futebol Lagoas</p>
+        <div><span class="span-rotulo">Fundação</span> 12/04/1931</div>
+        <div><span class="span-rotulo">Sede</span> Avenida do Porto, 120 — Lagoas</div>
+        <div><span class="span-rotulo">Site</span> <a href="#" target="_blank">www.aflaogas.mv</a></div>
+        <div><span class="span-rotulo">Presidente</span> Nome do Presidente</div>
+        <div><span class="span-rotulo">Mandato</span> 01/01/2024 a 31/12/2027</div>
+      </div>
+    </div>
+
+    <!-- Informações gerais / estádio -->
+    <h2 class="secao secao-detalhe">Informações gerais</h2>
+    <div class="info-geral">
+      <div class="mascote">
+        <img src="../mascotes/af-lagoas.png" alt="Mascote do A.F. Lagoas">
+      </div>
+      <div id="informacoes">
+        <div><span class="span-rotulo">Estádio</span> Estádio do Litoral (E. A.F. Lagoas)</div>
+        <div><span class="span-rotulo">Capacidade</span> 18.000</div>
+        <div><span class="span-rotulo">Localização</span> Avenida do Porto, 120 — Lagoas</div>
+        <div><span class="span-rotulo">Dist. do Centro</span> 3 km</div>
+        <div><span class="span-rotulo">Dimen. do Campo</span> 105 x 68</div>
+        <div><span class="span-rotulo">Cabines de Rádio</span> Sim</div>
+        <div><span class="span-rotulo">Iluminação</span> Sim</div>
+      </div>
+    </div>
+
+    <div class="titulos-conquistados">
+      <h2 class="secao secao-detalhe">Títulos conquistados</h2>
+      <ul class="lista-titulos">
+        <li><span>Nome do campeonato</span><span class="ano-titulo">Ano</span></li>
+        <li><span>Nome do campeonato</span><span class="ano-titulo">Ano</span></li>
+      </ul>
+    </div>
+
+    <!-- Uniformes -->
+    <div class="uniformes">
+      <h2 class="secao secao-detalhe">Uniformes</h2>
+      <div class="lista-uniformes">
+        <div class="uniforme-caixa">
+          <div class="uniforme-image"><img src="../uniformes/af-lagoas-1.png" alt="Uniforme 1"><div class="uniforme-modelo">Modelo 1</div></div>
+          <div class="informacoes">
+            <div><span class="uniforme-rotulo">Camisa</span><span>Branca</span></div>
+            <div><span class="uniforme-rotulo">Calção</span><span>Azul-marinho</span></div>
+            <div><span class="uniforme-rotulo">Meião</span><span>Branco</span></div>
+          </div>
+        </div>
+        <div class="uniforme-caixa">
+          <div class="uniforme-image"><img src="../uniformes/af-lagoas-2.png" alt="Uniforme 2"><div class="uniforme-modelo">Modelo 2</div></div>
+          <div class="informacoes">
+            <div><span class="uniforme-rotulo">Camisa</span><span>Azul-marinho</span></div>
+            <div><span class="uniforme-rotulo">Calção</span><span>Branco</span></div>
+            <div><span class="uniforme-rotulo">Meião</span><span>Azul-marinho</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Atletas cadastrados -->
+    <div class="atletas">
+      <h2 class="secao">Atletas cadastrados</h2>
+      <div class="menu-horizontal">
+        <ul>
+          <li class="ativa"><a href="#" data-tipo="profissional">Profissional</a></li>
+          <li><a href="#" data-tipo="amador">Amador</a></li>
+        </ul>
+      </div>
+      <div id="busca-atletas">
+        <input id="campo-busca-atletas" type="text" placeholder="Localizar atleta">
+        <button id="botao-busca-atletas" type="button">Buscar</button>
+      </div>
+      <div class="lista-atletas">
+        <div class="atleta-caixa" data-tipo="profissional"><span class="apelido">Apelido:</span> — <br>Nome do atleta</div>
+        <div class="atleta-caixa" data-tipo="profissional"><span class="apelido">Apelido:</span> — <br>Nome do atleta</div>
+        <div class="atleta-caixa" data-tipo="profissional"><span class="apelido">Apelido:</span> — <br>Nome do atleta</div>
+        <div class="atleta-caixa" data-tipo="profissional"><span class="apelido">Apelido:</span> — <br>Nome do atleta</div>
+        <div class="atleta-caixa" data-tipo="profissional"><span class="apelido">Apelido:</span> — <br>Nome do atleta</div>
+        <div class="atleta-caixa" data-tipo="profissional"><span class="apelido">Apelido:</span> — <br>Nome do atleta</div>
+        <div class="atleta-caixa" data-tipo="profissional"><span class="apelido">Apelido:</span> — <br>Nome do atleta</div>
+        <div class="atleta-caixa" data-tipo="profissional"><span class="apelido">Apelido:</span> — <br>Nome do atleta</div>
+        <div class="atleta-caixa" data-tipo="profissional"><span class="apelido">Apelido:</span> — <br>Nome do atleta</div>
+        <div class="atleta-caixa" data-tipo="profissional"><span class="apelido">Apelido:</span> — <br>Nome do atleta</div>
+        <div class="atleta-caixa" data-tipo="amador"><span class="apelido">Apelido:</span> — <br>Nome do atleta</div>
+        <div class="atleta-caixa" data-tipo="amador"><span class="apelido">Apelido:</span> — <br>Nome do atleta</div>
+        <div class="atleta-caixa" data-tipo="amador"><span class="apelido">Apelido:</span> — <br>Nome do atleta</div>
+        <div class="atleta-caixa" data-tipo="amador"><span class="apelido">Apelido:</span> — <br>Nome do atleta</div>
+        <div class="atleta-caixa" data-tipo="amador"><span class="apelido">Apelido:</span> — <br>Nome do atleta</div>
+        <div class="atleta-caixa" data-tipo="amador"><span class="apelido">Apelido:</span> — <br>Nome do atleta</div>
+        <div class="atleta-caixa" data-tipo="amador"><span class="apelido">Apelido:</span> — <br>Nome do atleta</div>
+        <div class="atleta-caixa" data-tipo="amador"><span class="apelido">Apelido:</span> — <br>Nome do atleta</div>
+        <div class="atleta-caixa" data-tipo="amador"><span class="apelido">Apelido:</span> — <br>Nome do atleta</div>
+        <div class="atleta-caixa" data-tipo="amador"><span class="apelido">Apelido:</span> — <br>Nome do atleta</div>
+      </div>
+      <div class="paginacao" aria-label="Páginas de atletas"></div>
+    </div>
+
+    <div id="modal-atleta" role="dialog" aria-modal="true" aria-labelledby="titulo-modal-atleta">
+      <div class="janela-atleta">
+        <button class="fechar-modal" type="button" aria-label="Fechar">&times;</button>
+        <img class="foto-atleta" src="../ffsm.png" alt="Foto do atleta" data-campo="foto">
+        <h3 id="titulo-modal-atleta">Dados do atleta</h3>
+        <dl class="dados-atleta">
+          <dt>Apelido</dt><dd data-campo="apelido">Não informado</dd>
+          <dt>Nome</dt><dd data-campo="nome">Não informado</dd>
+          <dt>Nascimento</dt><dd data-campo="nascimento">Não informado</dd>
+          <dt>Posição</dt><dd data-campo="posicao">Não informado</dd>
+          <dt>Registro de contrato</dt><dd data-campo="contrato">Não informado</dd>
+        </dl>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== RODAPÉ ===================== -->
+<div id="rodape">
+  <div id="rodape-links">
+    <a href="#">Ouvidoria</a>|
+    <a href="#">Fale Conosco</a>|
+    <a href="#">Áreas Restritas</a>
+    <span class="direitos">FEDERAÇÃO DE FUTEBOL DO SAN MÂRTIN</span>
+  </div>
+</div>
+<div id="rodape-baixo"><div>© FFSM — Todos os direitos reservados.</div></div>
+
+<script>
+  const botaoTema = document.querySelector('#botao-tema');
+  const iconeTema = botaoTema.querySelector('img');
+
+  function aplicarTema(tema) {
+    const modoEscuro = tema === 'escuro';
+    document.body.classList.toggle('tema-escuro', modoEscuro);
+    iconeTema.src = modoEscuro ? '../assets/moon.png' : '../assets/sun.png';
+    botaoTema.setAttribute('aria-label', modoEscuro ? 'Ativar modo claro' : 'Ativar modo escuro');
+  }
+
+  aplicarTema(localStorage.getItem('ffsm-tema') || 'claro');
+  botaoTema.addEventListener('click', () => {
+    const novoTema = document.body.classList.contains('tema-escuro') ? 'claro' : 'escuro';
+    localStorage.setItem('ffsm-tema', novoTema);
+    aplicarTema(novoTema);
+  });
+
+  const atletas = [...document.querySelectorAll('.atleta-caixa')];
+  const abas = document.querySelectorAll('.menu-horizontal li');
+  const paginacao = document.querySelector('.paginacao');
+  const campoBuscaAtletas = document.querySelector('#campo-busca-atletas');
+  const botaoBuscaAtletas = document.querySelector('#botao-busca-atletas');
+  const itensPorPagina = 10;
+  let tipoAtual = 'profissional';
+  let termoBusca = '';
+
+  const modalAtleta = document.querySelector('#modal-atleta');
+  const fecharModal = modalAtleta.querySelector('.fechar-modal');
+  const campoApelido = modalAtleta.querySelector('[data-campo="apelido"]');
+  const campoNome = modalAtleta.querySelector('[data-campo="nome"]');
+  const campoNascimento = modalAtleta.querySelector('[data-campo="nascimento"]');
+  const campoPosicao = modalAtleta.querySelector('[data-campo="posicao"]');
+  const campoContrato = modalAtleta.querySelector('[data-campo="contrato"]');
+  const campoFoto = modalAtleta.querySelector('[data-campo="foto"]');
+
+  function abrirModalAtleta(atleta) {
+    const partes = atleta.innerHTML.split('<br>');
+    campoApelido.textContent = atleta.dataset.apelido || atleta.querySelector('.apelido')?.nextSibling?.textContent.trim() || 'Não informado';
+    campoNome.textContent = atleta.dataset.nome || (partes[1] || '').replace(/<[^>]*>/g, '').trim() || 'Não informado';
+    campoNascimento.textContent = atleta.dataset.nascimento || 'Não informado';
+    campoPosicao.textContent = atleta.dataset.posicao || 'Não informado';
+    campoContrato.textContent = atleta.dataset.contrato || 'Não informado';
+    campoFoto.src = atleta.dataset.foto || '../ffsm.png';
+    modalAtleta.classList.add('aberto');
+    fecharModal.focus();
+  }
+
+  function fecharModalAtleta() { modalAtleta.classList.remove('aberto'); }
+  atletas.forEach(atleta => {
+    atleta.tabIndex = 0;
+    atleta.addEventListener('click', () => abrirModalAtleta(atleta));
+    atleta.addEventListener('keydown', evento => {
+      if (evento.key === 'Enter' || evento.key === ' ') {
+        evento.preventDefault();
+        abrirModalAtleta(atleta);
+      }
+    });
+  });
+  fecharModal.addEventListener('click', fecharModalAtleta);
+  modalAtleta.addEventListener('click', evento => {
+    if (evento.target === modalAtleta) fecharModalAtleta();
+  });
+  document.addEventListener('keydown', evento => {
+    if (evento.key === 'Escape') fecharModalAtleta();
+  });
+
+  function normalizarTexto(texto) {
+    return texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  }
+
+  function mostrarPagina(numeroPagina) {
+    const atletasFiltrados = atletas.filter(atleta => {
+      const pertenceAbaAtual = atleta.dataset.tipo === tipoAtual;
+      const correspondeBusca = normalizarTexto(atleta.textContent).includes(termoBusca);
+      return pertenceAbaAtual && correspondeBusca;
+    });
+    const totalPaginas = Math.ceil(atletasFiltrados.length / itensPorPagina);
+    const paginaValida = Math.min(numeroPagina, Math.max(totalPaginas, 1));
+
+    atletas.forEach(atleta => atleta.hidden = true);
+    atletasFiltrados.forEach((atleta, indice) => {
+      const primeiraPosicao = (paginaValida - 1) * itensPorPagina;
+      const ultimaPosicao = primeiraPosicao + itensPorPagina;
+      atleta.hidden = indice < primeiraPosicao || indice >= ultimaPosicao;
+    });
+
+    paginacao.replaceChildren();
+    for (let pagina = 1; pagina <= totalPaginas; pagina += 1) {
+      const botao = document.createElement('button');
+      botao.type = 'button';
+      botao.textContent = pagina;
+      botao.className = pagina === paginaValida ? 'atual' : '';
+      botao.setAttribute('aria-label', `Página ${pagina}`);
+      botao.setAttribute('aria-current', pagina === paginaValida ? 'page' : 'false');
+      botao.addEventListener('click', () => mostrarPagina(pagina));
+      paginacao.appendChild(botao);
+    }
+  }
+
+  abas.forEach(aba => {
+    const link = aba.querySelector('a');
+    link.addEventListener('click', evento => {
+      evento.preventDefault();
+      tipoAtual = link.dataset.tipo;
+      abas.forEach(item => item.classList.toggle('ativa', item === aba));
+      mostrarPagina(1);
+    });
+  });
+
+  function buscarAtletas() {
+    termoBusca = normalizarTexto(campoBuscaAtletas.value.trim());
+    mostrarPagina(1);
+  }
+
+  botaoBuscaAtletas.addEventListener('click', buscarAtletas);
+  campoBuscaAtletas.addEventListener('keydown', evento => {
+    if (evento.key === 'Enter') {
+      evento.preventDefault();
+      buscarAtletas();
+    }
+  });
+
+  mostrarPagina(1);
+</script>
+<script src="../assets/site-aviso.js"></script>
+
+</body>
+</html>
