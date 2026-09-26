@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FFSM | Termos e Condições</title>
+  <link rel="icon" type="image/png" href="ffsm.png">
+  <style>
+    :root {
+      --azul-escuro:#910b26;
+      --azul-faixa:#b2082a;
+      --azul-link:#c81438;
+      --cinza-rodape:#4a4a4a;
+      --cinza-claro:#f4f4f4;
+      --borda:#e2e2e2;
+      --texto:#222;
+      --fundo:#fff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--texto);
+      background: var(--fundo);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    p, li { line-height: 1.7; }
+    h1, h2, h3 { margin-top: 0; }
+
+    #header { border-bottom: 1px solid var(--borda); }
+    #header-top {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 20px;
+    }
+    #logo { display: flex; align-items: center; gap: 10px; font-weight: bold; font-size: 26px; color: var(--azul-escuro); }
+    #logo img { height: 72px; }
+    #botao-tema {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--borda);
+      background: var(--cinza-claro);
+      color: var(--texto);
+      width: 38px;
+      height: 38px;
+      padding: 7px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    #botao-tema img { width: 20px; height: 20px; object-fit: contain; }
+    #faixa-azul { background: var(--azul-faixa); height: 14px; }
+
+    #banner {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    #banner-img {
+      height: 150px;
+      border-radius: 4px;
+      background: linear-gradient(rgba(10,15,25,.55), rgba(10,15,25,.55)),
+        repeating-linear-gradient(45deg,#1c4d2e,#1c4d2e 20px,#225a36 20px,#225a36 40px);
+      margin-top: 24px;
+      margin-bottom: 24px;
+    }
+
+    #conteudo {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 20px 60px;
+      flex: 1;
+    }
+
+    .card {
+      border: 1px solid var(--borda);
+      background: #fff;
+      border-radius: 6px;
+      padding: 28px 30px;
+    }
+
+    .intro {
+      margin-bottom: 24px;
+      padding-bottom: 18px;
+      border-bottom: 2px solid var(--borda);
+    }
+    .intro h1 {
+      font-size: clamp(28px, 3vw, 40px);
+      color: var(--azul-escuro);
+      margin-bottom: 10px;
+      font-weight: 400;
+    }
+    .intro p {
+      margin: 0;
+      color: #555;
+      font-size: 15px;
+    }
+
+    .termos {
+      display: grid;
+      gap: 26px;
+    }
+
+    .secao {
+      padding: 0;
+    }
+    .secao h2 {
+      font-size: 22px;
+      color: var(--azul-escuro);
+      margin-bottom: 12px;
+      font-weight: 400;
+    }
+    .secao p, .secao li {
+      font-size: 15px;
+      color: var(--texto);
+    }
+    .secao ul {
+      margin: 0;
+      padding-left: 22px;
+    }
+
+    #rodape {
+      background: var(--cinza-rodape);
+      color: #ddd;
+      margin-top: 40px;
+    }
+    #rodape-links {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px 20px;
+      font-size: 12px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    #rodape-links a { color: #ddd; }
+    #rodape-links a:hover { color: #fff; }
+    #rodape-links .direitos {
+      margin-left: auto;
+      font-weight: bold;
+      letter-spacing: .5px;
+      font-size: 11px;
+    }
+    #rodape-baixo {
+      background: #3a3a3a;
+      font-size: 11px;
+      color: #aaa;
+    }
+    #rodape-baixo div {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 10px 20px;
+    }
+
+    @media (max-width: 760px) {
+      #header-top {
+        padding: 14px 16px;
+      }
+      #logo img {
+        height: 58px;
+      }
+      #banner {
+        padding: 0 14px;
+      }
+      #banner-img {
+        height: 104px;
+        margin-top: 14px;
+        margin-bottom: 18px;
+      }
+      #conteudo {
+        padding: 0 14px 40px;
+      }
+      .card {
+        padding: 20px 16px;
+      }
+      .secao h2 {
+        font-size: 20px;
+      }
+      .rodape-links {
+        padding: 14px 16px;
+      }
+      #rodape-links .direitos {
+        width: 100%;
+        margin-left: 0;
+        margin-top: 4px;
+      }
+    }
+
+    body.tema-escuro {
+      --cinza-claro:#2b2b2b;
+      --borda:#454545;
+      --texto:#f1f1f1;
+      --fundo:#181818;
+    }
+    body.tema-escuro #header { background: #202020; }
+    body.tema-escuro .card { background: #1f1f1f; }
+    body.tema-escuro .intro p,
+    body.tema-escuro .secao p,
+    body.tema-escuro .secao li { color: #ddd; }
+    body.tema-escuro #botao-tema { background: #383838; color: #fff; }
+  </style>
+</head>
+<body>
+  <div id="header">
+    <div id="header-top">
+      <a href="index.html" id="logo">
+        <img src="logo-ffsm.png" alt="Logo da FFSM">
+      </a>
+      <button id="botao-tema" type="button" aria-label="Ativar modo escuro">
+        <img src="assets/sun.png" alt="">
+      </button>
+    </div>
+  </div>
+  <div id="faixa-azul"></div>
+
+  <div id="banner">
+    <div id="banner-img"></div>
+  </div>
+
+  <main id="conteudo">
+    <article class="card termos">
+      <header class="intro">
+        <h1>Termos e Condições de Uso</h1>
+        <p>Estes termos regulam a utilização do site da Federação de Futebol do San Martin (FFSM) e dos conteúdos por ele disponibilizados.</p>
+      </header>
+
+      <section class="secao">
+        <h2>1. Aceitação dos termos</h2>
+        <p>Ao acessar, navegar ou utilizar este site, você concorda com estes Termos e Condições de Uso e com a Política de Privacidade aplicável. Caso não concorde com qualquer disposição, recomendamos que interrompa o uso imediatamente.</p>
+      </section>
+
+      <section class="secao">
+        <h2>2. Objetivo do site</h2>
+        <p>O portal tem como finalidade divulgar informações esportivas, clubes, ligas municipais, calendário, dados institucionais e conteúdos relacionados ao futebol da região, com caráter informativo e institucional.</p>
+      </section>
+
+      <section class="secao">
+        <h2>3. Uso permitido</h2>
+        <p>Você pode utilizar o site para consultar informações e acompanhar as atividades esportivas divulgadas. É proibido:</p>
+        <ul>
+          <li>Utilizar o site para fins ilícitos, fraudulentos ou que violem direitos de terceiros;</li>
+          <li>Publicar conteúdo ofensivo, difamatório ou que possa causar danos a pessoas, clubes ou instituições;</li>
+          <li>Interferir no funcionamento do portal, incluindo ataques, tentativa de exploração de falhas técnicas ou qualquer prática que comprometa a estabilidade do sistema;</li>
+          <li>Reproduzir, redistribuir ou usar conteúdo do site sem autorização expressa, quando houver restrição legal ou institucional.</li>
+        </ul>
+      </section>
+
+      <section class="secao">
+        <h2>4. Conteúdo e responsabilidade</h2>
+        <p>As informações publicadas no site são disponibilizadas com o objetivo de informar o público e podem ser atualizadas periodicamente. Embora a FFSM se esforce para manter a precisão das informações, não garante que todo o conteúdo esteja livre de erros, omissões ou alterações sem aviso prévio.</p>
+        <p>O uso de informações do site é de responsabilidade do usuário, que deve verificar fontes e dados quando necessário.</p>
+      </section>
+
+      <section class="secao">
+        <h2>5. Propriedade intelectual</h2>
+        <p>Todo o conteúdo do site, incluindo textos, imagens, logotipos, escudos, layouts, gráficos e demais elementos visuais, é protegido por direitos autorais e de propriedade intelectual, quando aplicável. O uso não autorizado pode configurar violação legal.</p>
+      </section>
+
+      <section class="secao">
+        <h2>6. Links externos</h2>
+        <p>O site pode conter links para páginas externas. Esses links são oferecidos apenas como referência e não significam endosso, supervisão ou responsabilidade pela qualidade, precisão ou conteúdo dos sites acessados.</p>
+      </section>
+
+      <section class="secao">
+        <h2>7. Privacidade e dados</h2>
+        <p>O site pode coletar dados de navegação, como informações do navegador, endereço IP e estatísticas de uso para melhorar a experiência e garantir o bom funcionamento da plataforma. Essas informações serão tratadas conforme as normas aplicáveis e a política de privacidade disponível no portal.</p>
+      </section>
+
+      <section class="secao">
+        <h2>8. Disponibilidade e alterações</h2>
+        <p>O site pode passar por manutenção, ajustes e atualizações periódicas. A FFSM não garante disponibilidade ininterrupta do portal e pode alterar, suspender ou encerrar qualquer funcionalidade sem aviso prévio, quando necessário.</p>
+      </section>
+
+      <section class="secao">
+        <h2>9. Isenção de responsabilidade</h2>
+        <p>Em nenhuma hipótese a FFSM será responsável por danos diretos, indiretos, incidentais, consequenciais ou especiais decorrentes do uso do site, incluindo perda de dados, interrupção de serviços, erro de informação ou acesso não autorizado.</p>
+      </section>
+
+      <section class="secao">
+        <h2>10. Alterações e vigência</h2>
+        <p>Estes termos podem ser alterados a qualquer momento, sem necessidade de aviso prévio em todos os casos, para refletir melhorias, mudanças legais ou adaptações operacionais. O uso contínuo do site após alterações implica na aceitação da nova versão.</p>
+      </section>
+
+      <section class="secao">
+        <h2>11. Lei aplicável</h2>
+        <p>Estes termos são regidos pelas leis vigentes no Brasil, sendo competente a jurisdição do foro da comarca de San Martin, salvo disposição legal em contrário.</p>
+      </section>
+
+      <section class="secao">
+        <h2>12. Contato</h2>
+        <p>Para dúvidas, sugestões ou solicitações relacionadas ao site e aos termos de uso, entre em contato por meio dos canais oficiais disponibilizados na página de suporte do portal.</p>
+      </section>
+    </article>
+  </main>
+
+  <div id="rodape">
+    <div id="rodape-links">
+      <a href="#">Ouvidoria</a>|
+      <a href="#">Fale Conosco</a>|
+      <a href="termos.html">Termos e Condições</a>
+      <span class="direitos">FEDERAÇÃO DE FUTEBOL DO SAN MÂRTIN</span>
+    </div>
+  </div>
+  <div id="rodape-baixo"><div>© FFSM — Todos os direitos reservados.</div></div>
+
+  <script>
+    const botaoTema = document.querySelector('#botao-tema');
+    const iconeTema = botaoTema.querySelector('img');
+
+    function aplicarTema(tema) {
+      const modoEscuro = tema === 'escuro';
+      document.body.classList.toggle('tema-escuro', modoEscuro);
+      iconeTema.src = modoEscuro ? 'assets/moon.png' : 'assets/sun.png';
+      botaoTema.setAttribute('aria-label', modoEscuro ? 'Ativar modo claro' : 'Ativar modo escuro');
+    }
+
+    aplicarTema(localStorage.getItem('ffsm-tema') || 'claro');
+    botaoTema.addEventListener('click', () => {
+      const novoTema = document.body.classList.contains('tema-escuro') ? 'claro' : 'escuro';
+      localStorage.setItem('ffsm-tema', novoTema);
+      aplicarTema(novoTema);
+    });
+  </script>
+  <script src="assets/site-aviso.js"></script>
+</body>
+</html>
