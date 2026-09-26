@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FFSM | Liga Desportiva San-Dieguense</title>
+<link rel="icon" type="image/png" href="../ffsm.png">
+<style>
+  :root{
+    --azul-escuro:#910b26;
+    --azul-faixa:#b2082a;
+    --azul-link:#c81438;
+    --cinza-rodape:#4a4a4a;
+    --cinza-claro:#f4f4f4;
+    --borda:#e2e2e2;
+    --texto:#222;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:Arial, Helvetica, sans-serif;color:var(--texto);background:#fff;}
+  a{text-decoration:none;color:inherit;}
+  h2{font-weight:400;}
+  #header{border-bottom:1px solid var(--borda);}
+  #header-top{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:18px 20px;}
+  #logo{display:flex;align-items:center;}
+  #logo img{height:72px;}
+  #botao-tema{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--borda);background:var(--cinza-claro);width:38px;height:38px;padding:7px;border-radius:4px;cursor:pointer;}
+  #botao-tema img{width:20px;height:20px;object-fit:contain;}
+  #faixa-azul{height:14px;background:var(--azul-faixa);}
+  #breadcrumb{max-width:1200px;margin:0 auto;padding:14px 20px;font-size:12px;color:#666;}
+  #breadcrumb a{color:var(--azul-link);}
+  #conteudo{max-width:1200px;margin:0 auto;padding:0 20px 60px;display:flex;gap:40px;}
+  #coluna-esquerda{width:230px;flex-shrink:0;}
+  h2.titulo-pagina{font-size:26px;color:var(--azul-escuro);margin:0 0 16px;}
+  .menu-liga{list-style:none;margin:0;padding:0;border-left:2px solid var(--borda);}
+  .menu-liga a{display:block;padding:11px 14px;font-size:14px;border-left:3px solid transparent;}
+  .menu-liga a:hover{background:var(--cinza-claro);}
+  .menu-liga a.ativa{background:var(--azul-escuro);color:#fff;border-left-color:var(--azul-faixa);font-weight:bold;}
+  #coluna-direita{flex:1;min-width:0;border-left:1px solid var(--borda);padding-left:40px;}
+  .cabecalho-liga{display:flex;align-items:center;gap:20px;padding:2px 0 22px;border-bottom:1px solid var(--borda);margin-bottom:24px;}
+  .marca-liga{width:112px;height:auto;flex:0 0 112px;}
+  .texto-cabecalho-liga{min-width:0;}
+  .sobretitulo{margin:0 0 7px;color:var(--azul-link);font-size:12px;font-weight:bold;text-transform:uppercase;}
+  .cabecalho-liga h1{margin:0 0 8px;color:var(--azul-escuro);font-size:30px;}
+  .cabecalho-liga p:last-child{margin:0;color:#666;font-size:14px;line-height:1.5;}
+  h2.secao{font-size:18px;color:var(--azul-escuro);border-bottom:2px solid var(--borda);padding-bottom:8px;margin:0 0 16px;}
+  .temporada{margin-bottom:32px;}
+  .dados-liga{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 28px;margin:0;}
+  .dados-liga div{display:grid;grid-template-columns:minmax(105px, .75fr) minmax(0,1.25fr);gap:10px;padding:11px 0;border-bottom:1px solid var(--borda);font-size:14px;line-height:1.4;}
+  .dados-liga dt{font-weight:bold;color:var(--azul-escuro);}
+  .dados-liga dd{margin:0;color:#555;}
+  .calendario{margin-bottom:32px;}
+  .lista-jogos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;}
+  .jogo{border:1px solid var(--borda);padding:17px 18px;min-width:0;}
+  .jogo h3{margin:0 0 12px;color:var(--azul-escuro);font-size:16px;}
+  .jogo .data-jogo{margin:0 0 5px;font-size:14px;font-weight:bold;}
+  .jogo .local-jogo{margin:0;color:#666;font-size:13px;}
+  .confronto{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:start;gap:10px;margin-top:18px;text-align:center;}
+  .equipe{display:flex;min-width:0;height:86px;flex-direction:column;align-items:center;justify-content:flex-start;gap:6px;font-size:12px;line-height:1.2;font-weight:bold;overflow-wrap:anywhere;}
+  .equipe img{width:38px;height:42px;flex:0 0 42px;object-fit:contain;}
+  .placar{align-self:center;color:var(--azul-link);font-size:18px;font-weight:bold;white-space:nowrap;}
+  .detalhes{margin-bottom:32px;}
+  .detalhes p{margin:0 0 12px;font-size:14px;line-height:1.65;color:#555;}
+  .clubes{margin-bottom:8px;}
+  .tabela-clubes{width:100%;border-collapse:collapse;font-size:14px;}
+  .tabela-clubes th,.tabela-clubes td{text-align:left;padding:11px 10px;border-bottom:1px solid var(--borda);}
+  .tabela-clubes th{color:var(--azul-escuro);font-size:12px;text-transform:uppercase;}
+  .tabela-clubes td:last-child,.tabela-clubes th:last-child{text-align:right;}
+  .clube-nome{display:flex;align-items:center;gap:10px;font-weight:bold;}
+  .clube-nome img{width:34px;height:34px;object-fit:contain;flex-shrink:0;}
+  .vazio{color:#777;}
+  #rodape{background:var(--cinza-rodape);color:#ddd;margin-top:40px;}
+  #rodape-links{max-width:1200px;margin:0 auto;padding:16px 20px;font-size:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  #rodape-links a{color:#ddd;}
+  #rodape-links a:hover{color:#fff;}
+  #rodape-links .direitos{margin-left:auto;font-weight:bold;font-size:11px;}
+  #rodape-baixo{background:#3a3a3a;font-size:11px;color:#aaa;}
+  #rodape-baixo div{max-width:1200px;margin:0 auto;padding:10px 20px;}
+  @media (max-width:760px){
+    #header-top{padding:14px 16px;}
+    #logo img{height:58px;}
+    #breadcrumb{padding:12px 14px;font-size:11px;}
+    #conteudo{flex-direction:column;padding:0 14px 40px;gap:24px;}
+    #coluna-esquerda{width:auto;}
+    h2.titulo-pagina{font-size:24px;margin-bottom:12px;}
+    .menu-liga{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;border-left:0;}
+    .menu-liga li:last-child{grid-column:1 / -1;}
+    .menu-liga a{padding:10px 9px;border:0;border-radius:3px;font-size:13px;}
+    #coluna-direita{border-left:0;border-top:1px solid var(--borda);padding:20px 0 0;}
+    .cabecalho-liga{gap:14px;}
+    .marca-liga{width:84px;flex-basis:84px;}
+    .cabecalho-liga h1{font-size:25px;}
+    .dados-liga,.lista-jogos{grid-template-columns:1fr;}
+    .dados-liga div{grid-template-columns:125px minmax(0,1fr);}
+    .jogo{padding:15px 12px;}
+    .confronto{gap:7px;}
+    .equipe{font-size:13px;}
+    .tabela-clubes th,.tabela-clubes td{padding:10px 6px;font-size:12px;}
+    #rodape-links{padding:14px 16px;}
+    #rodape-links .direitos{width:100%;margin-left:0;margin-top:4px;}
+  }
+  body.tema-escuro{--cinza-claro:#2b2b2b;--borda:#454545;--texto:#f1f1f1;background:#181818;}
+  body.tema-escuro #header{background:#202020;}
+  body.tema-escuro #breadcrumb,body.tema-escuro .cabecalho-liga p:last-child,body.tema-escuro .dados-liga dd,body.tema-escuro .detalhes p,body.tema-escuro .jogo .local-jogo,body.tema-escuro .vazio{color:#aaa;}
+  body.tema-escuro .jogo{background:#202020;}
+  body.tema-escuro #botao-tema{background:#383838;}
+</style>
+</head>
+<body>
+<div id="header">
+  <div id="header-top">
+    <a href="../index.html" id="logo"><img src="../logo-ffsm.png" alt="Logo da FFSM"></a>
+    <button id="botao-tema" type="button" aria-label="Ativar modo escuro"><img src="../assets/sun.png" alt=""></button>
+  </div>
+</div>
+<div id="faixa-azul"></div>
+
+<div id="breadcrumb">
+  Você está aqui: <a href="../index.html?divisao=liga-municipal">Clubes e ligas</a> &gt; Liga Desportiva San-Dieguense
+</div>
+
+<main id="conteudo">
+  <aside id="coluna-esquerda">
+    <h2 class="titulo-pagina">Liga Municipal</h2>
+    <ul class="menu-liga">
+      <li><a href="../index.html?divisao=serie-a">Série A</a></li>
+      <li><a href="../index.html?divisao=serie-b">Série B</a></li>
+      <li><a href="../index.html?divisao=serie-c">Série C</a></li>
+      <li><a class="ativa" href="../index.html?divisao=liga-municipal" aria-current="page">Liga Municipal</a></li>
+      <li><a href="../index.html?divisao=amadores">Amadores</a></li>
+    </ul>
+  </aside>
+
+  <section id="coluna-direita">
+    <header class="cabecalho-liga">
+      <img class="marca-liga" src="../ligas/Liga%20Desportiva%20San-Dieguense.png" alt="Escudo da Liga Desportiva San-Dieguense">
+      <div class="texto-cabecalho-liga">
+        <p class="sobretitulo">Federação de Futebol do San Mârtin</p>
+        <h1>Liga Desportiva San-Dieguense</h1>
+      </div>
+    </header>
+
+    <section class="temporada" id="temporada">
+      <h2 class="secao">Informações da temporada</h2>
+      <dl class="dados-liga">
+        <div><dt>Edição</dt><dd>94ª</dd></div>
+        <div><dt>Organização</dt><dd>Liga Desportiva San-Dieguense</dd></div>
+        <div><dt>Município(s)</dt><dd>Barra de San Diego</dd></div>
+        <div><dt>Período</dt><dd>13 de fevereiro a 25 de abril de 2027</dd></div>
+        <div><dt>Formato</dt><dd>Campeonato Municipal de Futebol de Campo</dd></div>
+        <div><dt>Regulamento</dt><dd>Regulamento Geral da 94ª Edição</dd></div>
+        <div><dt>Inscrições</dt><dd>12 a 30 de janeiro de 2027</dd></div>
+        <div><dt>Contato</dt><dd>Secretaria da LDS</dd></div>
+      </dl>
+    </section>
+
+    <section class="calendario" id="calendario">
+      <h2 class="secao">Calendário de jogos</h2>
+      <div class="lista-jogos">
+        <article class="jogo">
+          <h3>Jogo anterior</h3>
+          <p class="data-jogo">20 de dez. 2004, 18h00</p>
+          <p class="local-jogo">Local: 	Estádio Olímpico da Barra</p>
+          <div class="confronto">
+            <span class="equipe"><img src="../ligas/Liga Desportiva San-Dieguense.png" alt=""><span>Liga Desportiva San-Dieguense</span></span>
+            <span class="placar">1 x 4</span>
+            <span class="equipe"><img src="../ligas/Liga Skebense de Desportos.png" alt=""><span>Liga Skebense de Desportos</span></span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="detalhes">
+      <h2 class="secao">Sobre a competição</h2>
+      <p>Descrição da liga: a preencher.</p>
+      <p>História e objetivo da competição: a preencher.</p>
+      <p>Critérios de classificação e desempate: a preencher.</p>
+    </section>
+
+    <section class="clubes" id="participantes">
+      <h2 class="secao">Clubes participantes</h2>
+      <table class="tabela-clubes">
+        <thead><tr><th>Clube</th><th>Município</th><th>Situação</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="clube-nome"><img src="../escudos/ca-barra-de-san-diego.png" alt=""><span>C.A. Barra de San Diego</span></span></td>
+            <td>A definir</td>
+            <td>Participante</td>
+          </tr>
+          <tr>
+            <td><span class="clube-nome"><img src="../escudos/cs-porto-venezia.png" alt=""><span>C.S. Porto Venezia</span></span></td>
+            <td>A definir</td>
+            <td>Participante</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </section>
+</main>
+
+<div id="rodape">
+  <div id="rodape-links">
+    <a href="#">Ouvidoria</a>|
+    <a href="#">Fale Conosco</a>|
+    <a href="../termos.html">Termos e Condições</a>
+    <span class="direitos">FEDERAÇÃO DE FUTEBOL DO SAN MÂRTIN</span>
+  </div>
+</div>
+<div id="rodape-baixo"><div>© FFSM — Todos os direitos reservados.</div></div>
+
+<script>
+  const botaoTema = document.querySelector('#botao-tema');
+  const iconeTema = botaoTema.querySelector('img');
+
+  function aplicarTema(tema) {
+    const modoEscuro = tema === 'escuro';
+    document.body.classList.toggle('tema-escuro', modoEscuro);
+    iconeTema.src = modoEscuro ? '../assets/moon.png' : '../assets/sun.png';
+    botaoTema.setAttribute('aria-label', modoEscuro ? 'Ativar modo claro' : 'Ativar modo escuro');
+  }
+
+  aplicarTema(localStorage.getItem('ffsm-tema') || 'claro');
+  botaoTema.addEventListener('click', () => {
+    const novoTema = document.body.classList.contains('tema-escuro') ? 'claro' : 'escuro';
+    localStorage.setItem('ffsm-tema', novoTema);
+    aplicarTema(novoTema);
+  });
+</script>
+<script src="../assets/site-aviso.js"></script>
+</body>
+</html>
